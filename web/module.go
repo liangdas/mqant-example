@@ -52,7 +52,7 @@ func (self *Web) startHttpServer() *http.Server {
 		rstr, err := mqrpc.String(
 			self.RpcCall(
 				ctx,
-				"HelloWorld", //要访问的moduleType
+				"helloworld", //要访问的moduleType
 				"/say/hi",    //访问模块中handler路径
 				mqrpc.Param(r.Form.Get("name")),
 				selector.WithStrategy(func(services []*registry.Service) selector.Next {
@@ -86,7 +86,7 @@ func (self *Web) startHttpServer() *http.Server {
 			),
 		)
 
-		//SvrSession, err :=self.GetRouteServer("HelloWorld",
+		//SvrSession, err :=self.GetRouteServer("helloworld",
 		//	selector.WithStrategy(func(services []*registry.Service) selector.Next {
 		//		var nodes []*registry.Node
 		//

@@ -1,8 +1,8 @@
 {
 	"Module":{
-      "HelloWorld":[
+      "helloworld":[
         {
-          "Id":"HelloWorld001",
+          "Id":"helloworld",
           "ProcessID":"development"
         }
       ],
@@ -17,17 +17,18 @@
           "Id":"rpctest",
           "ProcessID":"development"
         }
+      ],
+      "Gate":[
+        {
+          "Id":"Gate001",
+          "ProcessID":"development"
+        }
+      ],
+      "httpgate":[
+        {
+          "Id":"httpgate",
+          "ProcessID":"development"
+        }
       ]
-    },
-	"Mqtt":{
-        "WirteLoopChanNum": 10,
-        "ReadPackLoop": 1,
-        "ReadTimeout": 600,
-        "WriteTimeout": 300
-	},
-    "Rpc":{
-        "MaxCoroutine":10000,
-        "RpcExpired": 1,
-        "LogSuccess":false
     }
 }
