@@ -27,7 +27,7 @@ func main() {
 		C: 1, //并发数
 	}
 	//manager := table_test.NewManager(task) //房间模型的demo
-	manager := test_task.NewManager(task)	//gate demo
+	manager := test_task.NewManager(task) //gate demo
 	fmt.Println("开始压测请等待")
 	task.Run(manager)
 	c := make(chan os.Signal, 1)

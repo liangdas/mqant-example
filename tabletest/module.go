@@ -22,7 +22,7 @@ var Module = func() module.Module {
 
 type tabletest struct {
 	basemodule.BaseModule
-	room    *room.Room
+	room *room.Room
 }
 
 func (self *tabletest) GetType() string {
@@ -52,36 +52,36 @@ func (self *tabletest) OnDestroy() {
 	_ = self.GetServer().OnDestroy()
 }
 
-func (self *tabletest)NewTable(module module.RPCModule, tableId string) (room.BaseTable, error) {
+func (self *tabletest) NewTable(module module.RPCModule, tableId string) (room.BaseTable, error) {
 	table := NewTable(
 		module,
 		room.TableId(tableId),
 		room.Router(func(TableId string) string {
-			return fmt.Sprintf("%v://%v/%v",self.GetType(),self.GetServerId(),tableId)
+			return fmt.Sprintf("%v://%v/%v", self.GetType(), self.GetServerId(), tableId)
 		}),
 		room.DestroyCallbacks(func(table room.BaseTable) error {
-			log.Info("回收了房间: %v",table.TableId())
+			log.Info("回收了房间: %v", table.TableId())
 			_ = self.room.DestroyTable(table.TableId())
 			return nil
 		}),
-		)
+	)
 	return table, nil
 }
 
 func (self *tabletest) gatesay(session gate.Session, msg map[string]interface{}) (r string, err error) {
-	room_id:=msg["room_id"].(string)
-	action:=msg["action"].(string)
-	table:=self.room.GetTable(room_id)
+	room_id := msg["room_id"].(string)
+	action := msg["action"].(string)
+	table := self.room.GetTable(room_id)
 	if table == nil {
-		table, err = self.room.CreateById(self,room_id,self.NewTable)
-		if err!=nil{
-			return "",err
+		table, err = self.room.CreateById(self, room_id, self.NewTable)
+		if err != nil {
+			return "", err
 		}
 	}
-	if table.State()==room.Uninitialized {
+	if table.State() == room.Uninitialized {
 		table.Create()
 	}
-	erro := table.PutQueue(action, session,msg)
+	erro := table.PutQueue(action, session, msg)
 	if erro != nil {
 		return "", erro
 	}

@@ -28,7 +28,7 @@ func NewWork(manager *Manager) *Work {
 	this := new(Work)
 	this.manager = manager
 	rand.NewSource(time.Now().UnixNano())
-	this.name=fmt.Sprintf("%v",rand.Intn(100))
+	this.name = fmt.Sprintf("%v", rand.Intn(100))
 	//opts := this.GetDefaultOptions("tcp://127.0.0.1:3563")
 	opts := this.GetDefaultOptions("ws://127.0.0.1:3653")
 	opts.SetConnectionLostHandler(func(client MQTT.Client, err error) {
@@ -46,11 +46,11 @@ func NewWork(manager *Manager) *Work {
 
 	this.On("/room/say", func(client MQTT.Client, msg MQTT.Message) {
 		//服务端主动下发玩家加入事件
-		fmt.Println("me is",this.name,msg.Topic(),"=》", string(msg.Payload()))
+		fmt.Println("me is", this.name, msg.Topic(), "=》", string(msg.Payload()))
 	})
 	this.On("/room/join", func(client MQTT.Client, msg MQTT.Message) {
 		//服务端主动下发玩家加入事件
-		fmt.Println("me is",this.name,msg.Topic(),"=》", string(msg.Payload()))
+		fmt.Println("me is", this.name, msg.Topic(), "=》", string(msg.Payload()))
 	})
 	return this
 }
@@ -61,7 +61,7 @@ Work 代表一个协程内具体执行任务工作者
 type Work struct {
 	work.MqttWork
 	manager *Manager
-	name string
+	name    string
 }
 
 func (this *Work) UnmarshalResult(payload []byte) map[string]interface{} {
@@ -84,7 +84,7 @@ N/C 可计算出每一个Work(协程) RunWorker将要调用的次数
 func (this *Work) RunWorker(t task.Task) {
 	msg, err := this.Request("tabletest/HD_room_say", []byte(
 		mqant_tools.Sprintf(`{"room_id":"{room_id}","action":"/room/join","name":"{name}"}`,
-			map[string]string{"room_id":"mqantchat","name":this.name},
+			map[string]string{"room_id": "mqantchat", "name": this.name},
 		)))
 	if err != nil {
 		fmt.Println(msg.Topic(), err.Error())
@@ -93,7 +93,7 @@ func (this *Work) RunWorker(t task.Task) {
 
 	msg, err = this.Request("tabletest/HD_room_say", []byte(
 		mqant_tools.Sprintf(`{"room_id":"{room_id}","action":"/room/say","name":"{name}"}`,
-			map[string]string{"room_id":"mqantchat","name":this.name},
+			map[string]string{"room_id": "mqantchat", "name": this.name},
 		)))
 	if err != nil {
 		fmt.Println(msg.Topic(), err.Error())

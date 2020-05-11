@@ -10,17 +10,17 @@ import (
 	"reflect"
 	"time"
 )
+
 type MyTable struct {
 	room.QTable
-	module 		module.RPCModule
-	players  	map[string]room.BasePlayer
+	module  module.RPCModule
+	players map[string]room.BasePlayer
 }
 
-
-func (this *MyTable) GetSeats() map[string]room.BasePlayer{
+func (this *MyTable) GetSeats() map[string]room.BasePlayer {
 	return this.players
 }
-func (this *MyTable) GetModule() module.RPCModule{
+func (this *MyTable) GetModule() module.RPCModule {
 	return this.module
 }
 
@@ -31,42 +31,42 @@ func (this *MyTable) Update(ds time.Duration) {
 
 }
 
-func NewTable(module module.RPCModule,opts ...room.Option) *MyTable {
-	this:=&MyTable{
-		module:module,
-		players:map[string]room.BasePlayer{},
+func NewTable(module module.RPCModule, opts ...room.Option) *MyTable {
+	this := &MyTable{
+		module:  module,
+		players: map[string]room.BasePlayer{},
 	}
-	opts=append(opts,room.Update(this.Update))
-	opts=append(opts,room.NoFound(func(msg *room.QueueMsg) (value reflect.Value, e error) {
+	opts = append(opts, room.Update(this.Update))
+	opts = append(opts, room.NoFound(func(msg *room.QueueMsg) (value reflect.Value, e error) {
 		//return reflect.ValueOf(this.doSay), nil
 		return reflect.Zero(reflect.ValueOf("").Type()), errors.New("no found handler")
 	}))
-	opts=append(opts,room.SetRecoverHandle(func(msg *room.QueueMsg, err error) {
-		log.Error("Recover %v Error: %v",msg.Func,err.Error())
+	opts = append(opts, room.SetRecoverHandle(func(msg *room.QueueMsg, err error) {
+		log.Error("Recover %v Error: %v", msg.Func, err.Error())
 	}))
-	opts=append(opts,room.SetErrorHandle(func(msg *room.QueueMsg, err error) {
-		log.Error("Error %v Error: %v",msg.Func,err.Error())
+	opts = append(opts, room.SetErrorHandle(func(msg *room.QueueMsg, err error) {
+		log.Error("Error %v Error: %v", msg.Func, err.Error())
 	}))
-	this.OnInit(this,opts...)
+	this.OnInit(this, opts...)
 	this.Register("/room/say", this.doSay)
 	this.Register("/room/join", this.doJoin)
 	return this
 }
 
-func (this *MyTable) doSay(session gate.Session,msg map[string]interface{}) (err error ) {
-	player:=this.FindPlayer(session)
-	if player==nil{
+func (this *MyTable) doSay(session gate.Session, msg map[string]interface{}) (err error) {
+	player := this.FindPlayer(session)
+	if player == nil {
 		return errors.New("no join")
 	}
 	_ = this.NotifyCallBackMsg("/room/say", []byte(fmt.Sprintf("say hi from %v", msg["name"])))
 	return nil
 }
 
-func (this *MyTable) doJoin(session gate.Session,msg map[string]interface{}) (err error ) {
-	player:=&room.BasePlayerImp{}
+func (this *MyTable) doJoin(session gate.Session, msg map[string]interface{}) (err error) {
+	player := &room.BasePlayerImp{}
 	player.Bind(session)
 	player.OnRequest(session)
-	this.players[session.GetSessionId()]=player
+	this.players[session.GetSessionId()] = player
 	_ = this.NotifyCallBackMsg("/room/join", []byte(fmt.Sprintf("welcome to %v", msg["name"])))
 	return nil
 }
