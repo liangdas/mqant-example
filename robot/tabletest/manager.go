@@ -11,28 +11,36 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package main
+package table_test
 
 import (
-	"fmt"
 	"github.com/liangdas/armyant/task"
-	"mqant-example/robot/test"
+	"io"
 	"os"
-	"os/signal"
 )
 
-func main() {
+type Manager struct {
+	// Writer is where results will be written. If nil, results are written to stdout.
+	Writer io.Writer
+}
 
-	task := task.LoopTask{
-		C: 1, //并发数
+func (this *Manager) writer() io.Writer {
+	if this.Writer == nil {
+		return os.Stdout
 	}
-	//manager := table_test.NewManager(task) //房间模型的demo
-	manager := test_task.NewManager(task)	//gate demo
-	fmt.Println("开始压测请等待")
-	task.Run(manager)
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	<-c
-	task.Stop()
-	os.Exit(1)
+	return this.Writer
+}
+func (this *Manager) Finish(task task.Task) {
+	//total := time.Now().Sub(task.Start)
+}
+func (this *Manager) CreateWork() task.Work {
+	return NewWork(this)
+}
+
+// Run makes all the requests, prints the summary. It blocks until
+// all work is done.
+func NewManager(t task.Task) task.WorkManager {
+	// append hey's user agent
+	this := new(Manager)
+	return this
 }

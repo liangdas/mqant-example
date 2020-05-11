@@ -29,6 +29,12 @@
           "Id":"httpgate",
           "ProcessID":"development"
         }
+      ],
+      "tabletest":[
+        {
+          "Id":"tabletest",
+          "ProcessID":"development"
+        }
       ]
     }
 }

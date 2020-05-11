@@ -12,6 +12,7 @@ import (
 	"mqant-example/helloworld"
 	"mqant-example/httpgateway"
 	"mqant-example/rpctest"
+	"mqant-example/tabletest"
 	"mqant-example/web"
 	"net/http"
 	"time"
@@ -50,6 +51,7 @@ func main() {
 		rpctest.Module(),
 		mgate.Module(),
 		httpgateway.Module(),
+		tabletest.Module(),
 	)
 	if err != nil {
 		log.Error(err.Error())
