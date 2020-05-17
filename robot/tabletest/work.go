@@ -83,8 +83,8 @@ N/C 可计算出每一个Work(协程) RunWorker将要调用的次数
 */
 func (this *Work) RunWorker(t task.Task) {
 	msg, err := this.Request("tabletest/HD_room_say", []byte(
-		mqant_tools.Sprintf(`{"room_id":"{room_id}","action":"/room/join","name":"{name}"}`,
-			map[string]string{"room_id": "mqantchat", "name": this.name},
+		mqant_tools.Sprintf(`{"table_id":"{table_id}","action":"/room/join","name":"{name}"}`,
+			map[string]string{"table_id": "mqantchat", "name": this.name},
 		)))
 	if err != nil {
 		fmt.Println(msg.Topic(), err.Error())
@@ -92,8 +92,8 @@ func (this *Work) RunWorker(t task.Task) {
 	}
 
 	msg, err = this.Request("tabletest/HD_room_say", []byte(
-		mqant_tools.Sprintf(`{"room_id":"{room_id}","action":"/room/say","name":"{name}"}`,
-			map[string]string{"room_id": "mqantchat", "name": this.name},
+		mqant_tools.Sprintf(`{"table_id":"{table_id}","action":"/room/say","name":"{name}"}`,
+			map[string]string{"table_id": "mqantchat", "name": this.name},
 		)))
 	if err != nil {
 		fmt.Println(msg.Topic(), err.Error())

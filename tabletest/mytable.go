@@ -24,6 +24,13 @@ func (this *MyTable) GetModule() module.RPCModule {
 	return this.module
 }
 
+func (this *MyTable) OnCreate() {
+	//可以加载数据
+	log.Info("MyTable OnCreate")
+	//一定要调用QTable.OnCreate()
+	this.QTable.OnCreate()
+}
+
 /**
 每帧都会调用
 */
@@ -36,6 +43,7 @@ func NewTable(module module.RPCModule, opts ...room.Option) *MyTable {
 		module:  module,
 		players: map[string]room.BasePlayer{},
 	}
+	opts = append(opts, room.TimeOut(60))
 	opts = append(opts, room.Update(this.Update))
 	opts = append(opts, room.NoFound(func(msg *room.QueueMsg) (value reflect.Value, e error) {
 		//return reflect.ValueOf(this.doSay), nil
@@ -58,6 +66,7 @@ func (this *MyTable) doSay(session gate.Session, msg map[string]interface{}) (er
 	if player == nil {
 		return errors.New("no join")
 	}
+	player.OnRequest(session)
 	_ = this.NotifyCallBackMsg("/room/say", []byte(fmt.Sprintf("say hi from %v", msg["name"])))
 	return nil
 }
