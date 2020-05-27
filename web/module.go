@@ -191,6 +191,6 @@ func (self *Web) Run(closeSig chan bool) {
 }
 
 func (self *Web) OnDestroy() {
-	//一定别忘了关闭RPC
-	_ = self.GetServer().OnDestroy()
+	//一定别忘了继承
+	self.BaseModule.OnDestroy()
 }

@@ -48,8 +48,8 @@ func (self *tabletest) Run(closeSig chan bool) {
 }
 
 func (self *tabletest) OnDestroy() {
-	//一定别忘了关闭RPC
-	_ = self.GetServer().OnDestroy()
+	//一定别忘了继承
+	self.BaseModule.OnDestroy()
 }
 
 func (self *tabletest) NewTable(module module.RPCModule, tableId string) (room.BaseTable, error) {

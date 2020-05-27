@@ -48,8 +48,8 @@ func (self *HellWorld) Run(closeSig chan bool) {
 }
 
 func (self *HellWorld) OnDestroy() {
-	//一定别忘了关闭RPC
-	_ = self.GetServer().OnDestroy()
+	//一定继承
+	self.BaseModule.OnDestroy()
 	log.Info("%v模块已回收...", self.GetType())
 }
 func (self *HellWorld) say(name string) (r string, err error) {

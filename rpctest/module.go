@@ -47,8 +47,8 @@ func (self *rpctest) Run(closeSig chan bool) {
 }
 
 func (self *rpctest) OnDestroy() {
-	//一定别忘了关闭RPC
-	_ = self.GetServer().OnDestroy()
+	//一定别忘了继承
+	self.BaseModule.OnDestroy()
 }
 func (self *rpctest) testProto(req *rpcpb.ResultInfo) (*rpcpb.ResultInfo, error) {
 	r := &rpcpb.ResultInfo{Error: *proto.String(fmt.Sprintf("你说: %v", req.Error))}

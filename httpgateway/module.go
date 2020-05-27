@@ -70,8 +70,8 @@ func (self *httpgate) Run(closeSig chan bool) {
 }
 
 func (self *httpgate) OnDestroy() {
-	//一定别忘了关闭RPC
-	_ = self.GetServer().OnDestroy()
+	//别忘了继承
+	self.BaseModule.OnDestroy()
 }
 
 //--------httpgateway
