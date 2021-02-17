@@ -38,7 +38,7 @@ func (self *tabletest) OnInit(app module.App, settings *conf.ModuleSettings) {
 		server.RegisterInterval(15*time.Second),
 		server.RegisterTTL(30*time.Second),
 	)
-	self.room = room.NewRoom(self)
+	self.room = room.NewRoom(self.GetApp())
 	self.GetServer().RegisterGO("HD_room_say", self.gatesay)
 }
 
@@ -52,7 +52,7 @@ func (self *tabletest) OnDestroy() {
 	self.BaseModule.OnDestroy()
 }
 
-func (self *tabletest) NewTable(module module.RPCModule, tableId string) (room.BaseTable, error) {
+func (self *tabletest) NewTable(module module.App, tableId string) (room.BaseTable, error) {
 	table := NewTable(
 		module,
 		room.TableId(tableId),
@@ -73,7 +73,7 @@ func (self *tabletest) gatesay(session gate.Session, msg map[string]interface{})
 	action := msg["action"].(string)
 	table := self.room.GetTable(table_id)
 	if table == nil {
-		table, err = self.room.CreateById(self, table_id, self.NewTable)
+		table, err = self.room.CreateById(self.GetApp(), table_id, self.NewTable)
 		if err != nil {
 			return "", err
 		}

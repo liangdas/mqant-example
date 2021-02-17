@@ -13,15 +13,15 @@ import (
 
 type MyTable struct {
 	room.QTable
-	module  module.RPCModule
+	app  module.App
 	players map[string]room.BasePlayer
 }
 
 func (this *MyTable) GetSeats() map[string]room.BasePlayer {
 	return this.players
 }
-func (this *MyTable) GetModule() module.RPCModule {
-	return this.module
+func (this *MyTable) GetApp() module.App {
+	return this.app
 }
 
 func (this *MyTable) OnCreate() {
@@ -38,9 +38,9 @@ func (this *MyTable) Update(ds time.Duration) {
 
 }
 
-func NewTable(module module.RPCModule, opts ...room.Option) *MyTable {
+func NewTable(app module.App, opts ...room.Option) *MyTable {
 	this := &MyTable{
-		module:  module,
+		app:  app,
 		players: map[string]room.BasePlayer{},
 	}
 	opts = append(opts, room.TimeOut(60))
